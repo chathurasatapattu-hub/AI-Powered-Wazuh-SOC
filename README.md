@@ -83,3 +83,50 @@ git clone [https://github.com/your-username/AI-Powered-Wazuh-SOC.git](https://gi
 cd AI-Powered-Wazuh-SOC/mcp-server
 npm install
 npm run build
+```
+
+### 2. Environment Configuration
+Create a `.env` file in the `mcp-server` directory:
+```env
+WAZUH_API_URL=https://<YOUR_WAZUH_IP>:55000
+WAZUH_API_USER=wazuh-wui
+WAZUH_API_PASSWORD=YourSecurePasswordHere
+NODE_TLS_REJECT_UNAUTHORIZED=0  # For self-signed lab certificates
+```
+
+### 3. Configure Claude Desktop
+Add the server configuration to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "wazuh-soc": {
+      "command": "node",
+      "args": [
+        "C:/path/to/AI-Powered-Wazuh-SOC/mcp-server/dist/index.js"
+      ],
+      "env": {
+        "WAZUH_API_URL": "https://<YOUR_WAZUH_IP>:55000",
+        "WAZUH_API_USER": "wazuh-wui",
+        "WAZUH_API_PASSWORD": "YourSecurePasswordHere"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Security & Architectural Considerations
+
+* **Least-Privilege API Accounts:** The connector is configured with read-only Wazuh API credentials to prevent unauthorized policy or configuration modifications.
+* **Hub-and-Spoke Lab Integration:** Designed to integrate into an enterprise Hub-and-Spoke network topology, where the central Wazuh manager aggregates logs from spoke subnet workloads while maintaining network segregation.
+* **Data Sanitization:** Telemetry passing through the local MCP server is filtered to protect internal subnet architectures and identifiers prior to ingestion by the LLM context window.
+
+---
+
+## Future Enhancements
+
+- [ ] Add automated Sigma rule conversion to Wazuh custom XML rules via LLM prompts.
+- [ ] Implement two-way active response capabilities (e.g., automated IP null-routing or agent isolation) with strict human-in-the-loop approval.
+- [ ] Support multi-tenant Azure Sentinel / Elastic SIEM connectors alongside Wazuh.
