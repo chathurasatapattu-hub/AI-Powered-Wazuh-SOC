@@ -1,1 +1,20 @@
-
+{
+  "name": "wazuh-mcp-server",
+  "version": "1.0.0",
+  "description": "An MCP server bridging Claude and Wazuh SIEM",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5"
+  }
+}
